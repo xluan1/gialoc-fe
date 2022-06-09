@@ -7,7 +7,6 @@ const Items = () => {
 
   const getProducts = () =>
     axios.get("http://localhost:8080/api/products").then((res) => {
-      console.log(res.data);
       setProducts(res.data);
     });
 
@@ -26,7 +25,7 @@ const Items = () => {
         </header>
         <div className="row row-sm">
           {products.slice(25, 33).map((product, id) => (
-            <div className="col-md-3">
+            <div key={id} className="col-md-3">
             <figure className="card card-product-grid">
               <div className="img-wrap">
                 <Link to={`/product/${product.id}`} className="img-wrap">
@@ -73,7 +72,7 @@ const Items = () => {
                 </div>{" "}
                 {/* price-wrap.// */}
                 <hr />
-                <p className="mb-3">
+                <div className="mb-3">
                   <div style={{ display: "flex" }}>
                     <span className="tag">
                       {" "}
@@ -100,7 +99,7 @@ const Items = () => {
                       {product.waterproof} ATM
                     </p>
                   </div>
-                </p>
+                </div>
                 <div style={{ display: "flex" }}>
                   <p className="text-left">
                     <img src="assets/images/misc/payments.png" height={26} />
@@ -122,7 +121,7 @@ const Items = () => {
                       marginTop: "10px",
                       color: "#00bfa5",
                     }}
-                    class="fa fa-truck"
+                    className="fa fa-truck"
                   ></i>
                 </div>
                 <label className="custom-control mb-3 custom-checkbox">

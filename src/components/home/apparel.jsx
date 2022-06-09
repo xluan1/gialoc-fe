@@ -1,9 +1,8 @@
-import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
 import "./css/style.css";
 
-const Apparel = ({ products }: Props) => {
+const Apparel = ( {products} ) => {
   return (
     <div>
       {/* =============== SECTION 1 =============== */}
@@ -22,7 +21,7 @@ const Apparel = ({ products }: Props) => {
                   được biết đến nhiều nhất bởi các sản phẩm như: đồng hồ, máy
                   tính, thiết bị <br /> âm thanh máy ảnh,.v.v.
                 </p>
-                <img
+                <img alt=""
                   style={{ top: "155px", right: "-32px" }}
                   src="assets/images/home/CASIO.png"
                   className="img-bg"
@@ -33,14 +32,14 @@ const Apparel = ({ products }: Props) => {
             <div className="col-md-9">
               <ul className="row no-gutters bordered-cols">
                 {products?.slice(4, 8).map((product, id) => (
-                  <div className="col-md-3" style={{ height: "405px" }}>
+                  <div key={id} className="col-md-3" style={{ height: "405px" }}>
                     <figure className="card card-product-grid">
                       <div className="img-wrap" style={{ height: "200px" }}>
                         <Link
                           to={`/product/${product.id}`}
                           className="img-wrap"
                         >
-                          <img
+                          <img alt=""
                             style={{
                               width: "172.2px",
                               height: "180px",
@@ -94,7 +93,7 @@ const Apparel = ({ products }: Props) => {
                               marginTop: "5px",
                               color: "#00bfa5",
                             }}
-                            class="fa fa-truck"
+                            className="fa fa-truck"
                           ></i>
                         </div>{" "}
                         {/* price-wrap.// */}

@@ -1,6 +1,15 @@
 import React from "react";
+import { logout } from "../../redux/thunks/auth-thunks";
+import { useDispatch } from 'react-redux'
+import { useNavigate } from "react-router-dom";
 
 const Navbar_admin = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const onClickLogout = () => {
+    dispatch(logout(navigate));
+};
+
   return (
     <div>
       {/* Navbar */}
@@ -25,6 +34,11 @@ const Navbar_admin = () => {
           <li className="nav-item d-none d-sm-inline-block">
             <a href="#" className="nav-link">
               Liên hệ
+            </a>
+          </li>
+          <li className="nav-item d-none d-sm-inline-block">
+            <a href="#" className="nav-link" onClick={onClickLogout}>
+              Đăng xuất
             </a>
           </li>
         </ul>

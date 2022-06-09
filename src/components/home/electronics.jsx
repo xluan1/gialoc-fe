@@ -1,9 +1,8 @@
-import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
 import "./css/style.css";
 
-const Electronics = ({ products }: props) => {
+const Electronics = ( products ) => {
   return (
     <div>
       {/* =============== SECTION 2 =============== */}
@@ -22,7 +21,7 @@ const Electronics = ({ products }: props) => {
                   trường. Dòng đồng hồ CITIZEN ECO-DRIVE đã và đang gây nên trào
                   lưu mới trong làng đồng hồ thế giới.
                 </p>
-                <img
+                <img alt=""
                   style={{ top: "155px", right: "-58px" }}
                   src="assets/images/home/CITIZEN.png"
                   className="img-bg"
@@ -40,7 +39,7 @@ const Electronics = ({ products }: props) => {
                           to={`/product/${product.id}`}
                           className="img-wrap"
                         >
-                          <img
+                          <img alt=""
                             style={{
                               width: "172.2px",
                               height: "180px",

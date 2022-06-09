@@ -1,19 +1,10 @@
-import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { useCart } from "react-use-cart";
 
 const Cart_content = () => {
-  const [products, setProducts] = useState([]);
 
-  const getProducts = () =>
-    axios.get("http://localhost:8080/api/products").then((res) => {
-      console.log(res.data);
-      setProducts(res.data);
-    });
-
-  useEffect(() => {
-    getProducts();
-  }, []);
+  const {isEmpty,items,cartTotal,removeItem,updateItemQuantity}=useCart();
 
   return (
     <div>
@@ -23,6 +14,9 @@ const Cart_content = () => {
           <div className="row">
             <main className="col-md-9">
               <div className="card">
+                {isEmpty
+                ? <div className="cart-empty">Giỏ hàng của bạn đang trống!</div>
+                :
                 <table className="table table-borderless table-shopping-cart">
                   <thead className="text-muted">
                     <tr className="small text-uppercase">
@@ -39,8 +33,8 @@ const Cart_content = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {products.slice(26, 27).map((product, id) => (
-                      <tr>
+                    {items.map((product) => (
+                      <tr key={product.id}>
                         <td>
                           <figure className="itemside">
                             <div className="aside">
@@ -69,20 +63,14 @@ const Cart_content = () => {
                               className="minus is-form"
                               type="button"
                               defaultValue="-"
+                              onClick={()=>updateItemQuantity(product.id,product.quantity-1)}
                             />
-                            <input
-                              aria-label="quantity"
-                              className="input-qty"
-                              max={10}
-                              min={1}
-                              name
-                              type="number"
-                              defaultValue={1}
-                            />
+                            <span className="input-qty is-form">{product.quantity}</span>
                             <input
                               className="plus is-form"
                               type="button"
                               defaultValue="+"
+                              onClick={()=>updateItemQuantity(product.id,product.quantity+1)}
                             />
                           </div>
                         </td>
@@ -97,25 +85,22 @@ const Cart_content = () => {
                           {/* price-wrap .// */}
                         </td>
                         <td className="text-right">
-                          <a
+                        <a
                             data-original-title="Save to Wishlist"
-                            title
-                            href
+                            href="#"
                             className="btn btn-light"
                             data-toggle="tooltip"
                           >
-                            {" "}
                             <i className="fa fa-heart" />
                           </a>
-                          <a href className="btn btn-light">
-                            {" "}
+                          <a href="#" className="btn btn-light" onClick={()=>removeItem(product.id)}>
                             Xóa
                           </a>
                         </td>
                       </tr>
                     ))}
                   </tbody>
-                </table>
+                </table>}
                 <div className="card-body border-top">
                   <a
                     href="/pay_cart"
@@ -149,7 +134,6 @@ const Cart_content = () => {
                         <input
                           type="text"
                           className="form-control"
-                          name
                           placeholder="Mã giảm giá"
                         />
                         <span className="input-group-append">
@@ -166,16 +150,16 @@ const Cart_content = () => {
                 <div className="card-body">
                   <dl className="dlist-align">
                     <dt>Tổng giá:</dt>
-                    <dd className="text-right"> 568₫</dd>
+                    <dd className="text-right"> {cartTotal}₫</dd>
                   </dl>
                   <dl className="dlist-align">
                     <dt>Chiết khấu:</dt>
-                    <dd className="text-right"> 658₫</dd>
+                    <dd className="text-right"> 0₫</dd>
                   </dl>
                   <dl className="dlist-align">
                     <dt>Tổng cộng:</dt>
                     <dd className="text-right  h5">
-                      <strong>1,650₫</strong>
+                      <strong>{cartTotal}₫</strong>
                     </dd>
                   </dl>
                   <hr />

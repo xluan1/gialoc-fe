@@ -1,39 +1,67 @@
-import React, { useRef } from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import Footer from "../home/footer";
 import Header from "../home/header";
-import { useForm } from "react-hook-form";
-import api from "../../services/api";
+import requestService from "../../util/request-service";
 
 const Register = () => {
-  const {
-    register,
-    watch,
-    formState: { errors },
-    handleSubmit,
-  } = useForm({
-    mode: "onChange",
-  });
-
-  const password = useRef({});
-  password.current = watch("password", "");
-
-  const onSubmit = (data) => {
-    const user = {
-      // username: this.state.
-      email: data.email,
-      password: data.password,
-      userName: data.userName,
-      role: ["user"],
-    };
-
-    console.log(data);
-
-    // alert(JSON.stringify(data));
-    api.post(`api/auth/signup`, { user }).then((res) => {
-      console.log(res);
-    });
+  const registerForm={
+    email: '',
+    firstName: '',
+    lastName: '',
+    password: '',
+    phoneNumber: '',
+    rePassword: '',
+    userName: ''
   };
+  const registerAddressForm={
+    country: '',
+    hamlet: '',
+    province: '',
+    town: '',
+    village: ''
+  }
+  const navigate = useNavigate();
+  const [user, setUser] = useState(registerForm);
+  const [error,setError]= useState('');
+  const [address,setAddress]=useState(registerAddressForm);
+  const handleChangeInput=(event)=>{
+    const newdata = { ...user };
+    newdata[event.target.name] = event.target.value;
+    setUser(newdata);
+  }
+  const handleChangeInputAddress=(event)=>{
+    const newdata = { ...address };
+    newdata[event.target.name] = event.target.value;
+    setAddress(newdata);
+  }
+  
+  const onClickRegister = async (event) => {
+    event.preventDefault();
+    const _register={
+      address: address,
+      email: user.email,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      password: user.password,
+      phoneNumber: user.phoneNumber,
+      rePassword: user.rePassword,
+      userName: user.userName
+    };
+    // alert(JSON.stringify(data));
+    try {
+      const response = await requestService.post("/auth/sign-up", _register, 1500);
+      setUser(response.data);
+      navigate("/login");
+    } catch (error) {
+        setError((error.response.data.errorDetail));
+    }
+  };
+
+  useEffect(() => {
+    const timeout = setTimeout(() => setError(null), 2000);
+    return () => clearTimeout(timeout);
+}, [error]);
 
   return (
     <div>
@@ -48,59 +76,161 @@ const Register = () => {
         >
           <article className="card-body">
             <header className="mb-4">
+              {error ? <div className="alert alert-danger" role="alert">{error}</div> : null}
               <h4 className="card-title">Đăng ký</h4>
             </header>
-            <form onSubmit={handleSubmit(onSubmit)}>
+            <form onSubmit={onClickRegister}>
               <div className="form-group">
-                <label>Tên tài khoản</label>
+                <label>Tên người dùng</label>
                 <input
-                  {...register("userName", { required: true })}
                   type="text"
                   className="form-control"
-                  placeholder
+                  placeholder="Nhập tên người dùng"
+                  name={'userName'}
+                  value={user.userName}
+                  onChange={handleChangeInput}
                 />
-                {errors.userName && <p>Vui lòng nhập tên tài khoản</p>}
               </div>{" "}
               {/* form-group end.// */}
               <div className="form-group">
                 <label>Email</label>
                 <input
-                  {...register("email", { required: true })}
                   type="email"
                   className="form-control"
-                  placeholder
+                  placeholder="Nhập địa chỉ email"
+                  name={"email"}
+                  value={user.email}
+                  onChange={handleChangeInput}
                 />
-                {errors.email && <p>Vui lòng nhập email</p>}
                 <small className="form-text text-muted">
                   Chúng tôi sẽ không bao giờ chia sẻ email của bạn với bất kỳ ai
                   khác.
                 </small>
               </div>{" "}
+              {/*  */}
+              <div className="form-row">
+                <div className="form-group col-md-6">
+                  <label>Họ</label>
+                  <input
+                    className="form-control"
+                    type="text"
+                    placeholder="Nhập họ"
+                    name={"lastName"}
+                    value={user.lastName}
+                    onChange={handleChangeInput}
+                  />
+                </div>{" "}
+                {/* form-group end.// */}
+                <div className="form-group col-md-6">
+                  <label>Tên</label>
+                  <input
+                    className="form-control"
+                    type="text"
+                    placeholder="Nhập tên"
+                    name={"firstName"}
+                    value={user.firstName}
+                    onChange={handleChangeInput}
+                  />
+                </div>{" "}
+                {/* form-group end.// */}
+              </div>
               {/* form-group end.// */}
               <div className="form-row">
                 <div className="form-group col-md-6">
                   <label>Tạo mật khẩu</label>
                   <input
-                    {...register("password", { required: true })}
                     className="form-control"
                     type="password"
+                    placeholder="Mật khẩu phải có ít nhất 6 ký tự"
+                    name={"password"}
+                    value={user.password}
+                    onChange={handleChangeInput}
                   />
-                  {errors.password && <p>Vui lòng nhập mật khẩu</p>}
                 </div>{" "}
                 {/* form-group end.// */}
                 <div className="form-group col-md-6">
                   <label>Lặp lại mật khẩu</label>
                   <input
-                    name="repeatPass"
                     className="form-control"
                     type="password"
-                    {...register("repeatPass", {
-                      validate: (value) =>
-                        value === password.current ||
-                        "Mật khẩu không trùng khớp",
-                    })}
+                    placeholder="Lặp lại mật khẩu"
+                    name={"rePassword"}
+                    value={user.rePassword}
+                    onChange={handleChangeInput}
                   />
-                  {errors.repeatPass && <p>{errors.repeatPass.message}</p>}
+                </div>{" "}
+                {/* form-group end.// */}
+              </div>
+              <div className="form-group">
+                <label>Số điện thoại</label>
+                <input
+                  type="text"
+                  className="form-control"
+                  placeholder="Số điện thoại phải đúng 10 số"
+                  name={'phoneNumber'}
+                  value={user.phoneNumber}
+                  onChange={handleChangeInput}
+                />
+              </div>{" "}
+              <div className="form-row">
+                <div className="form-group col-md-6">
+                  <label>Quốc gia</label>
+                  <input
+                    className="form-control"
+                    type="text"
+                    placeholder="Nhập quốc gia"
+                    name={"country"}
+                    value={address.country}
+                    onChange={handleChangeInputAddress}
+                  />
+                </div>{" "}
+                {/* form-group end.// */}
+                <div className="form-group col-md-6">
+                  <label>Tỉnh/Thành phố</label>
+                  <input
+                    className="form-control"
+                    type="text"
+                    placeholder="Nhập tỉnh/thành phố"
+                    name={"province"}
+                    value={address.province}
+                    onChange={handleChangeInputAddress}
+                  />
+                </div>{" "}
+                {/* form-group end.// */}
+                <div className="form-group col-md-6">
+                  <label>Huyện/Quận</label>
+                  <input
+                    className="form-control"
+                    type="text"
+                    placeholder="Nhập huyện/quận"
+                    name={"town"}
+                    value={address.town}
+                    onChange={handleChangeInputAddress}
+                  />
+                </div>{" "}
+                {/* form-group end.// */}
+                <div className="form-group col-md-6">
+                  <label>Xã/Phường</label>
+                  <input
+                    className="form-control"
+                    type="text"
+                    placeholder="Nhập xã/phường"
+                    name={"village"}
+                    value={address.village}
+                    onChange={handleChangeInputAddress}
+                  />
+                </div>{" "}
+                {/* form-group end.// */}
+                <div className="form-group col-md-6">
+                  <label>Thôn/Đường</label>
+                  <input
+                    className="form-control"
+                    type="text"
+                    placeholder="Nhập thôn/đường"
+                    name="hamlet"
+                    value={address.hamlet}
+                    onChange={handleChangeInputAddress}
+                  />
                 </div>{" "}
                 {/* form-group end.// */}
               </div>
@@ -133,7 +263,7 @@ const Register = () => {
         {/* card .// */}
         <p className="text-center mt-4">
           Đã Có tài khoản ?{" "}
-          <Link exact to="/login">
+          <Link to="/login">
             Đăng nhập
           </Link>
         </p>

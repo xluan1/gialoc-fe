@@ -39,19 +39,15 @@ const Index = () => {
           }
         />
 
-        <Electronics
+        {/* <Electronics
           products={
             products && products.filter((x) => x.typeid === 3).slice(0, 8)
           }
-        />
+        /> */}
 
         <Request />
 
-          <Items
-            products={
-              products && products.filter((x) => x.typeid === 4).slice(0, 12)
-            }
-          />
+          <Items />
 
         <Services />
 

@@ -4,17 +4,17 @@ import Subcribe from "../home/subscribe";
 import Footer from "../home/footer";
 import axios from "axios";
 import { Link, useParams } from "react-router-dom";
+import { useCart } from "react-use-cart";
 
 const Product_detail = () => {
   const { id } = useParams();
 
   const [imgdetail, setimgDetail] = useState(null);
 
-  const [cartItems, setCartItems] = useState([]);
-
   const [product, setProduct] = useState({});
-  console.log(id);
 
+  const [amount,setAmount]=useState(1);
+  
   const getProducts = () =>
     axios.get(`http://localhost:8080/api/products/${id}`).then((res) => {
       console.log(res.data);
@@ -24,18 +24,11 @@ const Product_detail = () => {
     getProducts();
   }, []);
 
-  const onAdd = (product) => {
-    const exist = cartItems.find((x) => x.id === product.id);
-    if (exist) {
-      setCartItems(
-        cartItems.map((x) =>
-          x.id === product.id ? { ...exist, qty: exist.qty + 1 } : x
-        )
-      );
-    } else {
-      setCartItems([...cartItems, { ...product, qty: 1 }]);
-    }
-  };
+  const handleQuantity=(event)=>{
+    setAmount(event.target.value);
+  }
+
+  const {addItem}=useCart();
 
   return (
     <div>
@@ -136,10 +129,10 @@ const Product_detail = () => {
                 {/* rating-wrap.// */}
                 <div className="mb-3">
                   <var className="price h4">
-                    {product.price}₫{/* {product.price.toLocaleString()}₫ */}
+                    {product.price?.toLocaleString()}₫{/* {product.price.toLocaleString()}₫ */}
                   </var>{" "}
                   <span className="text-muted">
-                    {product.price_discount}₫ incl. VAT
+                    {product.price_discount?.toLocaleString()}₫ incl. VAT
                   </span>
                 </div>{" "}
                 {/* price-detail-wrap .// */}
@@ -190,35 +183,32 @@ const Product_detail = () => {
                         className="minus is-form"
                         type="button"
                         defaultValue="-"
+                        onClick={()=>setAmount(amount-1)}
                       />
                       <input
-                        aria-label="quantity"
                         className="input-qty"
                         max={10}
                         min={1}
-                        name
                         type="number"
-                        defaultValue={1}
+                        value={amount}
+                        onChange={handleQuantity}
                       />
                       <input
                         className="plus is-form"
                         type="button"
                         defaultValue="+"
+                        onClick={()=>setAmount(amount+1)}
                       />
                     </div>
                   </div>{" "}
                   {/* col.// */}
                   <div className="form-group col-md">
-                    <a
-                      href="../shopping_cart"
-                      cartItems={cartItems}
-                      className="btn  btn-primary"
-                    >
+                    
                       <i className="fas fa-shopping-cart" />{" "}
-                      <span onClick={onAdd} className="text">
+                      <span onClick={()=>addItem(product,amount)} className="btn btn-primary">
                         Thêm vào giỏ hàng
                       </span>
-                    </a>{" "}
+                    
                     <a href="#" className="btn btn-light">
                       <i className="fas fa-envelope" />{" "}
                       <span className="text">Liên hệ với nhà cung cấp</span>
@@ -249,70 +239,56 @@ const Product_detail = () => {
               <table className="table table-bordered">
                 <tbody>
                   <tr>
-                    {" "}
-                    <th colSpan={2}>Thông tin cơ bản</th>{" "}
+                    <th colSpan={2}>Thông tin cơ bản</th>
                   </tr>
                   <tr>
-                    {" "}
                     <td>Thương hiệu</td>
-                    <td>{product.trademark}</td>{" "}
+                    <td>{product.trademark}</td>
                   </tr>
                   <tr>
-                    {" "}
                     <td>Số hiệu sản phẩm</td>
-                    <td>{product.product_number}</td>{" "}
+                    <td>{product.product_number}</td>
                   </tr>
                   <tr>
-                    {" "}
                     <td>Xuất xứ</td>
-                    <td>{product.origin}</td>{" "}
+                    <td>{product.origin}</td>
                   </tr>
                   <tr>
-                    {" "}
                     <td>Máy</td>
-                    <td>{product.machine}</td>{" "}
+                    <td>{product.machine}</td>
                   </tr>
                   <tr>
-                    {" "}
-                    <th colSpan={2}>Kích Thước</th>{" "}
+                    <th colSpan={2}>Kích Thước</th>
                   </tr>
                   <tr>
-                    {" "}
                     <td>Bề dày mặt số</td>
-                    <td>{product.dial_thickness}</td>{" "}
+                    <td>{product.dial_thickness}</td>
                   </tr>
                   <tr>
-                    {" "}
                     <td>Đường kính mặt số</td>
-                    <td>{product.dial_diameter}</td>{" "}
+                    <td>{product.dial_diameter}</td>
                   </tr>
                   <tr>
-                    {" "}
-                    <th colSpan={2}>Chất liệu</th>{" "}
+                    <th colSpan={2}>Chất liệu</th>
                   </tr>
                   <tr>
-                    {" "}
                     <td>Kính</td>
-                    <td>{product.glasses}</td>{" "}
+                    <td>{product.glasses}</td>
                   </tr>
                   <tr>
-                    {" "}
                     <td>Dây đeo</td>
-                    <td>{product.strap}</td>{" "}
+                    <td>{product.strap}</td>
                   </tr>
                   <tr>
-                    {" "}
-                    <th colSpan={2}>Tính năng</th>{" "}
+                    <th colSpan={2}>Tính năng</th>
                   </tr>
                   <tr>
-                    {" "}
                     <td>Chống nước</td>
-                    <td>{product.waterproof} ATM</td>{" "}
+                    <td>{product.waterproof} ATM</td>
                   </tr>
                   <tr>
-                    {" "}
                     <td>Đặc biệt</td>
-                    <td>{product.especially}</td>{" "}
+                    <td>{product.especially}</td>
                   </tr>
                 </tbody>
               </table>

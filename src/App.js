@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import Shopping_cart from "./components/cart/shopping_cart";
 import Listing_grid from "./components/category/listing_grid";
 import Listing_large from "./components/category/listing_large";
@@ -27,11 +27,22 @@ import Add_brand from "./components/crud/brand/add_brand";
 import Edit_cate from "./components/crud/category/edit_cate";
 import Edit_brand from "./components/crud/brand/edit_brand";
 import Payment_success from "./components/cart/payment_success";
+import useAuth from "./services/check-login/useAuth";
+import ProtectedRoutes from "./services/protected-routes/ProtectedRoutes"
 
 function App() {
+  const isAuth = useAuth();
+
   return (
     <Router>
       <Routes>
+        {/* Không thể truy cập trang đăng nhập khi đã đăng nhập thành công */}
+        {!isAuth ? <Route path="/login" element={<Login />} /> : <Route path="/login" element={<Navigate to="/" replace />} />}
+        {/* không thể truy cập đến trang admin, khi chưa đăng nhập */}
+        <Route element={<ProtectedRoutes />} >
+          <Route path="/administration" element={<Administration />} />
+        </Route>
+
         <Route path="/" element={<Index />} />
 
         <Route path="/profile_main" element={<Profile_main />} />
@@ -45,8 +56,6 @@ function App() {
         <Route path="/product/:id" element={<Product_detail />} />
 
         <Route path="/all_category" element={<All_category />} />
-
-        <Route path="/administration" element={<Administration />} />
 
         <Route path="/introduce" element={<Introduce />} />
 

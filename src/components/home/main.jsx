@@ -7,7 +7,6 @@ const Main = () => {
 
   const getCategory = () =>
     axios.get("http://localhost:8080/api/category").then((res) => {
-      console.log(res.data);
       setCategory(res.data);
     });
   useEffect(() => {

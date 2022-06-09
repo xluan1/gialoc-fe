@@ -4,8 +4,8 @@ const Cart_policy = () => {
   return (
     <div>
       {/* ========================= SECTION  ========================= */}
-      <section class="section-name border-top padding-y">
-        <div class="container">
+      <section className="section-name border-top padding-y">
+        <div className="container">
           <h6>Chính sách thanh toán và trả góp</h6>
           <p>
             Với mong muốn tạo điều kiện cho nhiều khách hàng có cơ hội sở hữu

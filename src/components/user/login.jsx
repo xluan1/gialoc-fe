@@ -1,40 +1,29 @@
-import React, { useRef } from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import Footer from "../home/footer";
 import Header from "../home/header";
-
-import { useForm } from "react-hook-form";
-import api from "../../services/api";
+import {login} from "../../redux/thunks/auth-thunks";
+import { useDispatch, useSelector } from 'react-redux'
+import { loginFailure } from "../../redux/actions/auth-actions";
 
 const Login = () => {
-  const {
-    register,
-    watch,
-    formState: { errors },
-    handleSubmit,
-  } = useForm({
-    mode: "onChange",
-  });
 
-  const password = useRef({});
-  password.current = watch("password", "");
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  let error = useSelector((state) => state.auth.error);
 
-  const onSubmit = (data) => {
-    const user = {
-      // username: this.state.
-      email: data.email,
-      password: data.password,
-      userName: data.userName,
-      role: ["user"],
-    };
-
-    console.log(data);
-
-    // alert(JSON.stringify(data));
-    api.post(`api/auth/signin`, { user }).then((res) => {
-      console.log(res);
-    });
+  const onClickSignIn = (event) => {
+      event.preventDefault();
+      const userData = { email, password }
+      dispatch(login(userData, navigate));
+      setPassword("");
   };
+  useEffect(() => {
+      const timeout = setTimeout(() => dispatch(loginFailure(null)), 2000);
+      return () => clearTimeout(timeout);
+  }, [error]);
 
   return (
     <div>
@@ -51,8 +40,9 @@ const Login = () => {
           style={{ maxWidth: "380px", marginTop: "100px" }}
         >
           <div className="card-body">
+          {error ? <div className="alert alert-danger" role="alert">{error}</div> : null}
             <h4 className="card-title mb-4">Đăng nhập</h4>
-            <form onSubmit={handleSubmit(onSubmit)}>
+            <form onSubmit={onClickSignIn}>
               <a
                 href="https://vi-vn.facebook.com/"
                 className="btn btn-facebook btn-block mb-2"
@@ -70,22 +60,22 @@ const Login = () => {
               </a>
               <div className="form-group">
                 <input
-                  {...register("userName", { required: true })}
-                  type="text"
+                  type="email"
                   className="form-control"
-                  placeholder="Tên tài khoản"
+                  placeholder="Địa chỉ email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                 />
-                {errors.userName && <p>Vui lòng nhập tên tài khoản</p>}
               </div>{" "}
               {/* form-group// */}
               <div className="form-group">
                 <input
-                  {...register("password", { required: true })}
                   className="form-control"
                   type="password"
                   placeholder="Mật khẩu"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
                 />
-                {errors.password && <p>Vui lòng nhập mật khẩu</p>}
               </div>{" "}
               {/* form-group// */}
               <div className="form-group">
@@ -117,7 +107,7 @@ const Login = () => {
         {/* card .// */}
         <p className="text-center mt-4">
           Không có tài khoản ?{" "}
-          <Link exact to="/register">
+          <Link to="/register">
             Đăng ký
           </Link>
         </p>

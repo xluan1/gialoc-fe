@@ -26,7 +26,7 @@ const Request = () => {
                   – Hotline đặt hàng: 1900 6777 <br />– Email liên hệ:
                   lienhe@bshop.com
                 </p>
-                <a href className="btn btn-primary rounded-pill">
+                <a href="#" className="btn btn-primary rounded-pill">
                   Tìm hiểu thêm
                 </a>
               </div>
@@ -40,7 +40,6 @@ const Request = () => {
                 <div className="form-group">
                   <input
                     className="form-control"
-                    name
                     placeholder="Bạn đang tìm kiếm cái gì ?"
                     type="text"
                   />
@@ -50,7 +49,6 @@ const Request = () => {
                     <input
                       className="form-control"
                       placeholder="Số lượng"
-                      name
                       type="text"
                     />
                     <select className="custom-select form-control">
@@ -75,9 +73,9 @@ const Request = () => {
                       type="checkbox"
                       defaultValue="option2"
                     />
-                    <dspaniv className="form-check-label">
+                    <span className="form-check-label">
                       Yêu cầu mô tả
-                    </dspaniv>
+                    </span>
                   </label>
                 </div>
                 <div className="form-group">

@@ -1,10 +1,14 @@
 import React, { useState } from "react";
 import { generatePath, Link, useNavigate } from "react-router-dom";
+import { useCart } from "react-use-cart";
+import useAuth from "../../services/check-login/useAuth";
 
 const Header = () => {
   const [search, setSearch] = useState("");
   const productSearch = `http://localhost:8080/api/search?name=${search}`;
   const [products, setProducts] = useState([]);
+  const isAuth = useAuth();
+  const useName=localStorage.getItem("userName");
 
   const useNavigateParams = () => {
     const navigate = useNavigate();
@@ -27,6 +31,8 @@ const Header = () => {
       .then((data) => setProducts(data));
     navigate("/search_items", `key = ${encodeURIComponent(search)}`);
   };
+
+  const {totalUniqueItems}=useCart();
 
   return (
     <div>
@@ -81,15 +87,16 @@ const Header = () => {
               {/* col.// */}
               <div className="col-xl-4 col-lg-4 col-md-6">
                 <div className="widgets-wrap float-md-right">
+                  {isAuth?
                   <div className="widget-header mr-3">
-                    <Link to={"../login"} className="widget-view">
+                    <Link to={"../administration"} className="widget-view">
                       <div className="icon-area">
                         <i className="fa fa-user" />
-                        <span className="notify">3</span>
                       </div>
-                      <small className="text"> Thông tin cá nhân </small>
+                      <small className="text"> {useName} </small>
                     </Link>
                   </div>
+                  :<></>}
                   <div className="widget-header mr-3">
                     <a href="#" className="widget-view">
                       <div className="icon-area">
@@ -111,7 +118,7 @@ const Header = () => {
                     <Link to={"../shopping_cart"} className="widget-view">
                       <div className="icon-area" >
                         <i className="fa fa-shopping-cart" />
-                        <span className="notify">1</span>
+                        <span className="notify">{totalUniqueItems}</span>
                       </div>
                       <small className="text"> Giỏ hàng </small>
                     </Link>
@@ -159,16 +166,21 @@ const Header = () => {
                 </li>
               </ul>
               <ul className="navbar-nav ml-md-auto">
-                <li className="nav-item">
-                  <Link to={"../administration"} className="nav-link">
-                    Quản trị
-                  </Link>
-                </li>
-                <li className="nav-item">
-                  <a className="nav-link" href="#">
-                    Tải ứng dụng
-                  </a>
-                </li>
+                {isAuth ? <></>
+                :
+                <>
+                  <li className="nav-item">
+                    <Link to={"../login"} className="nav-link">
+                      Đăng nhập
+                    </Link>
+                  </li>
+                  <li className="nav-item">
+                    <Link to={"../register"} className="nav-link">
+                      Đăng ký
+                    </Link>
+                  </li>
+                </>}
+                
                 <li className="nav-item dropdown">
                   <a
                     className="nav-link dropdown-toggle"
