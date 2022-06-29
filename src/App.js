@@ -28,6 +28,9 @@ import Edit_brand from "./components/crud/brand/edit_brand";
 import Payment_success from "./components/cart/payment_success";
 import useAuth from "./services/check-login/useAuth";
 import ProtectedRoutes from "./services/protected-routes/ProtectedRoutes"
+import Order_crud from "./components/crud/order/order_crud";
+import Add_Order from "./components/crud/order/add_order";
+import Edit_Order from "./components/crud/order/edit_order";
 
 function App() {
   const isAuth = useAuth();
@@ -89,6 +92,14 @@ function App() {
         <Route path="/add_brand" element={<Add_brand />} />
 
         <Route path="/edit_brand/:id" element={<Edit_brand />} />
+
+        {/* -------------------------Crud_Order---------------------------- */}
+
+        <Route path="/order_crud" element={<Order_crud />} />
+
+        <Route path="/add_order" element={<Add_Order />} />
+
+        <Route path="/edit_order/:id" element={<Edit_Order />} />
 
         {/* -------------------------Service---------------------------- */}
         <Route path="/business_partners" element={<Business_partners />} />

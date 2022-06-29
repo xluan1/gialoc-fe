@@ -4,32 +4,41 @@ import Footer_admin from "../footer_admin";
 import Head from "../head";
 import Navbar_admin from "../navbar_admin";
 import Sidebar_admin from "../sidebar_admin";
-
-import HTMLReactParser from "html-react-parser";
 import { Link, NavLink } from "react-router-dom";
 
-const Product_crud = () => {
-  const [products, setProducts] = useState([]);
+const Order_crud = () => {
+  const [orders, setOrders] = useState([]);
+  const [error, setError] = useState("");
+  const getAllOrder = () =>
+    axios.create({
+      baseURL: "http://localhost:8080/api/",
+      timeout: 1000,
+      headers: { Authorization: localStorage.getItem("token") },
+    });
+  const getAccountName = (accountName) => {
+    if (accountName === "anonymousUser" || accountName == null) {
+      return "Không có";
+    } else {
+      return accountName;
+    }
+  };
 
   useEffect(() => {
-    loadProducts();
-  }, []);
-
-  const loadProducts = async () => {
-    const result = await axios.get("http://localhost:8080/api/products");
-    setProducts(result.data.reverse());
-  };
-
-  const deleteProducts = (productId) => {
-    axios
-      .delete("http://localhost:8080/api/products/" + productId)
-      .then((result) => {
-        loadProducts();
+    getAllOrder()
+      .get("/order")
+      .then((response) => {
+        setOrders(response.data);
+        console.log(orders);
       })
-      .catch(() => {
-        alert("Error in the Code");
+      .catch((err) => {
+        if (err.response.status === 401 || err.response.status === 403) {
+          setError("Bạn không có quyền truy cập đến tài nguyên này!");
+        } else {
+          setError(err.response.message);
+        }
+        console.log(error);
       });
-  };
+  }, []);
 
   return (
     <div>
@@ -54,33 +63,31 @@ const Product_crud = () => {
                 <thead className="thead-primary">
                   <tr>
                     <th scope="col">Id</th>
-                    <th scope="col">Tên Sản Phẩm</th>
-                    <th scope="col">Hình Sản Phẩm</th>
-                    <th scope="col">Mô tả</th>
-                    <th scope="col">Thương hiệu</th>
-                    <th scope="col">Danh mục</th>
-                    <th scope="col">Xuất xứ</th>
-                    <th scope="col">Giá gốc</th>
-                    <th scope="col">Giảm giá</th>
-                    <th scope="col">Bảo hành</th>
-                    <th>Tính Năng</th>
+                    <th scope="col">Tên nguời đặt</th>
+                    <th scope="col">Địa chỉ người đặt</th>
+                    <th scope="col">Số điện thoại</th>
+                    <th scope="col">Số lượng</th>
+                    <th scope="col">Tổng tiền</th>
+                    <th scope="col">Tên người dùng</th>
+                    <th scope="col">Trạng thái</th>
+                    <th scope="col">Ngày tạo đơn</th>
+                    <th scope="col">Ngày cập nhật đơn</th>
+                    <th>Chỉnh sửa</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {products.slice(0, 10).map((product, index) => (
+                  {orders.slice(0, 10).map((item, index) => (
                     <tr key={index}>
                       <th scope="row">{index + 1}</th>
-                      <td>{product.name}</td>
-                      <td>
-                        <img src={product.image} width="125" height="100" />
-                      </td>
-                      <td>{HTMLReactParser(product.short_description)}</td>
-                      <td>{product.trademark}</td>
-                      <td>{product.cate}</td>
-                      <td>{product.origin}</td>
-                      <td>{product.price.toLocaleString()}₫</td>
-                      <td>{product.discount}%</td>
-                      <td>{product.insurance}</td>
+                      <td>{item.orderName}</td>
+                      <td>{item.orderAddress}</td>
+                      <td>{item.orderNumberPhone}</td>
+                      <td>{item.quantity}</td>
+                      <td>{item.total.toLocaleString()}₫</td>
+                      <td>{getAccountName(item.accountName)}</td>
+                      <td className="text-danger">{item.status}</td>
+                      <td>{item.createdAt}</td>
+                      <td>{item.updatedAt}</td>
                       <td>
                         <div
                           style={{
@@ -96,20 +103,12 @@ const Product_crud = () => {
                           >
                             <Link
                               className="btn btn-sm btn-outline-secondary badge"
-                              to={`/edit_product/${product.id}`}
+                              to={`/edit_order/${item.id}`}
                               // data-toggle="modal"
                               // data-target="#edit-form-modal"
                             >
                               <i className="fa fa-edit"></i>
                             </Link>
-                            <button
-                              className="btn btn-sm btn-outline-secondary badge"
-                              type="button"
-                              onClick={() => deleteProducts(product.id)}
-                              href="#"
-                            >
-                              <i className="fa fa-trash"></i>
-                            </button>
                           </div>
                         </div>
                         {/* <Edit_Product /> */}
@@ -175,4 +174,4 @@ const Product_crud = () => {
   );
 };
 
-export default Product_crud;
+export default Order_crud;

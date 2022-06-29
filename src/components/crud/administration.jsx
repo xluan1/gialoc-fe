@@ -1,11 +1,41 @@
 import React from "react";
+import { useState } from "react";
 import Body from "./body";
 import Footer_admin from "./footer_admin";
 import Head from "./head";
 import Navbar_admin from "./navbar_admin";
 import Sidebar_admin from "./sidebar_admin";
+import { useEffect } from "react";
+import axios from "axios";
 
 const Administration = () => {
+  const [orders, setOrders] = useState([]);
+  const [error, setError] = useState("");
+  const getAllOrder = () =>
+    axios.create({
+      baseURL: "http://localhost:8080/api/",
+      timeout: 1000,
+      headers: { Authorization: localStorage.getItem("token") },
+    });
+
+  useEffect(() => {
+    getAllOrder()
+      .get("/order")
+      .then((response) => {
+        setOrders(response.data);
+      })
+      .catch((err) => {
+        if (err.response.status === 401 || err.response.status === 403) {
+          setError("Bạn không có quyền truy cập đến tài nguyên này!");
+        } else {
+          setError(err.response.message);
+        }
+        console.log(orders);
+      });
+  }, []);
+  const totalOrder = orders.length;
+  console.log(totalOrder);
+
   return (
     <div>
       <Head />
@@ -16,31 +46,31 @@ const Administration = () => {
 
         {/* Content Wrapper. Contains page content */}
         <div className="content-wrapper">
-
           {/* Content Header (Page header) */}
-      <div className="content-header">
-        <div className="container-fluid">
-          <div className="row mb-2">
-            <div className="col-sm-6">
-              <h1 className="m-0">Bảng điều khiển</h1>
+          <div className="content-header">
+            <div className="container-fluid">
+              <div className="row mb-2">
+                <div className="col-sm-6">
+                  <h1 className="m-0">Bảng điều khiển</h1>
+                </div>
+                {/* /.col */}
+                <div className="col-sm-6">
+                  <ol className="breadcrumb float-sm-right">
+                    <li className="breadcrumb-item">
+                      <a href="#">Quản trị</a>
+                    </li>
+                    <li className="breadcrumb-item active">
+                      Bảng điều khiển 1
+                    </li>
+                  </ol>
+                </div>
+                {/* /.col */}
+              </div>
+              {/* /.row */}
             </div>
-            {/* /.col */}
-            <div className="col-sm-6">
-              <ol className="breadcrumb float-sm-right">
-                <li className="breadcrumb-item">
-                  <a href="#">Quản trị</a>
-                </li>
-                <li className="breadcrumb-item active">Bảng điều khiển 1</li>
-              </ol>
-            </div>
-            {/* /.col */}
+            {/* /.container-fluid */}
           </div>
-          {/* /.row */}
-        </div>
-        {/* /.container-fluid */}
-      </div>
-      {/* /.content-header */}
-
+          {/* /.content-header */}
           {/* Main content */}
           <section className="content">
             <div className="container-fluid">
@@ -50,8 +80,8 @@ const Administration = () => {
                   {/* small box */}
                   <div className="small-box bg-info">
                     <div className="inner">
-                      <h3>150</h3>
-                      <p>Đơn hàng mới</p>
+                      <h3>{totalOrder}</h3>
+                      <p>Đơn hàng</p>
                     </div>
                     <div className="icon">
                       <i className="ion ion-bag" />
@@ -232,7 +262,7 @@ const Administration = () => {
                               Alexander Pierce
                             </span>
                             <span className="direct-chat-timestamp float-right">
-                            23 tháng 1 2:00 chiều
+                              23 tháng 1 2:00 chiều
                             </span>
                           </div>
                           {/* /.direct-chat-infos */}
@@ -243,7 +273,8 @@ const Administration = () => {
                           />
                           {/* /.direct-chat-img */}
                           <div className="direct-chat-text">
-                          Mẫu này có thực sự miễn phí không? Thật không thể tin được!
+                            Mẫu này có thực sự miễn phí không? Thật không thể
+                            tin được!
                           </div>
                           {/* /.direct-chat-text */}
                         </div>
@@ -255,7 +286,7 @@ const Administration = () => {
                               Sarah Bullock
                             </span>
                             <span className="direct-chat-timestamp float-left">
-                            23 tháng 1 2:05 chiều
+                              23 tháng 1 2:05 chiều
                             </span>
                           </div>
                           {/* /.direct-chat-infos */}
@@ -278,7 +309,7 @@ const Administration = () => {
                               Alexander Pierce
                             </span>
                             <span className="direct-chat-timestamp float-right">
-                            23 tháng 1 5:37 chiều
+                              23 tháng 1 5:37 chiều
                             </span>
                           </div>
                           {/* /.direct-chat-infos */}
@@ -289,7 +320,8 @@ const Administration = () => {
                           />
                           {/* /.direct-chat-img */}
                           <div className="direct-chat-text">
-                          Làm việc với B - Shop trên một ứng dụng mới tuyệt vời! Muốn tham gia?
+                            Làm việc với B - Shop trên một ứng dụng mới tuyệt
+                            vời! Muốn tham gia?
                           </div>
                           {/* /.direct-chat-text */}
                         </div>
@@ -301,7 +333,7 @@ const Administration = () => {
                               Sarah Bullock
                             </span>
                             <span className="direct-chat-timestamp float-left">
-                            23 tháng 1 6:10 chiều
+                              23 tháng 1 6:10 chiều
                             </span>
                           </div>
                           {/* /.direct-chat-infos */}
@@ -311,9 +343,7 @@ const Administration = () => {
                             alt="message user image"
                           />
                           {/* /.direct-chat-img */}
-                          <div className="direct-chat-text">
-                            Tôi rất thích.
-                          </div>
+                          <div className="direct-chat-text">Tôi rất thích.</div>
                           {/* /.direct-chat-text */}
                         </div>
                         {/* /.direct-chat-msg */}
@@ -563,9 +593,7 @@ const Administration = () => {
                             />
                             <label htmlFor="todoCheck2" />
                           </div>
-                          <span className="text">
-                          Làm cho chủ đề đáp ứng
-                          </span>
+                          <span className="text">Làm cho chủ đề đáp ứng</span>
                           <small className="badge badge-info">
                             <i className="far fa-clock" /> 4 tiếng
                           </small>
@@ -589,7 +617,7 @@ const Administration = () => {
                             <label htmlFor="todoCheck3" />
                           </div>
                           <span className="text">
-                          Hãy để chủ đề tỏa sáng như một ngôi sao 
+                            Hãy để chủ đề tỏa sáng như một ngôi sao
                           </span>
                           <small className="badge badge-warning">
                             <i className="far fa-clock" /> 1 ngày
@@ -614,7 +642,7 @@ const Administration = () => {
                             <label htmlFor="todoCheck4" />
                           </div>
                           <span className="text">
-                          Hãy để chủ đề tỏa sáng như một ngôi sao 
+                            Hãy để chủ đề tỏa sáng như một ngôi sao
                           </span>
                           <small className="badge badge-success">
                             <i className="far fa-clock" /> 3 ngày
@@ -639,7 +667,7 @@ const Administration = () => {
                             <label htmlFor="todoCheck5" />
                           </div>
                           <span className="text">
-                          Kiểm tra tin nhắn và thông báo của bạn 
+                            Kiểm tra tin nhắn và thông báo của bạn
                           </span>
                           <small className="badge badge-primary">
                             <i className="far fa-clock" /> 1 tuần
@@ -664,7 +692,7 @@ const Administration = () => {
                             <label htmlFor="todoCheck6" />
                           </div>
                           <span className="text">
-                          Hãy để chủ đề tỏa sáng như một ngôi sao
+                            Hãy để chủ đề tỏa sáng như một ngôi sao
                           </span>
                           <small className="badge badge-secondary">
                             <i className="far fa-clock" /> 1 tháng
@@ -772,58 +800,47 @@ const Administration = () => {
                       </div>
                     </div>
                     <div className="card-body">
-                      <canvas
-                        className="chart"
-                        id="line-chart"
-                        style={{
-                          minHeight: "250px",
-                          height: "250px",
-                          maxHeight: "250px",
-                          maxWidth: "100%",
-                        }}
-                      />
+                      <div className="container">
+                        {orders.map((item, id) => (
+                          <div className="row" key={id}>
+                            <div className="text-order">{item.orderName}</div>
+                            <span className="text-right">{item.quantity}</span>
+                            <span className="text-right">{item.total}</span>
+                            <small className="text-status">{item.status}</small>
+                            <span className="text-end">{item.createdAt}</span>
+                          </div>
+                        ))}
+                        <canvas
+                          className="chart"
+                          id="line-chart"
+                          style={{
+                            minHeight: "250px",
+                            height: "250px",
+                            maxHeight: "250px",
+                            maxWidth: "100%",
+                          }}
+                        />
+                      </div>
                     </div>
                     {/* /.card-body */}
                     <div className="card-footer bg-transparent">
                       <div className="row">
-                        <div className="col-4 text-center">
-                          <input
-                            type="text"
-                            className="knob"
-                            data-readonly="true"
-                            defaultValue={20}
-                            data-width={60}
-                            data-height={60}
-                            data-fgcolor="#39CCCC"
-                          />
-                          <div className="text-white">Đơn đặt hàng qua thư</div>
+                        <div className="col text-center">tên</div>
+                        {/* ./col */}
+                        <div className="col text-center">
+                          <span className="text-white">số đơn</span>
                         </div>
                         {/* ./col */}
-                        <div className="col-4 text-center">
-                          <input
-                            type="text"
-                            className="knob"
-                            data-readonly="true"
-                            defaultValue={50}
-                            data-width={60}
-                            data-height={60}
-                            data-fgcolor="#39CCCC"
-                          />
-                          <div className="text-white">Trực tuyến</div>
+                        <div className="col text-center">
+                          <div className="text-white">tổng tiền</div>
                         </div>
                         {/* ./col */}
-                        <div className="col-4 text-center">
-                          <input
-                            type="text"
-                            className="knob"
-                            data-readonly="true"
-                            defaultValue={30}
-                            data-width={60}
-                            data-height={60}
-                            data-fgcolor="#39CCCC"
-                            style={{ width: "141px" }}
-                          />
-                          <div className="text-white">Trong cửa hàng</div>
+                        <div className="col text-center">
+                          <div className="text-white">trạng thái</div>
+                        </div>
+                        {/* ./col */}
+                        <div className="col text-center">
+                          <div className="text-white">ngày đặt</div>
                         </div>
                         {/* ./col */}
                       </div>

@@ -1755,3 +1755,27 @@ html[dir="rtl"] .itemside .info {
   padding: 10px 0;
   text-align: center;
 }
+
+.text-order {
+  font-weight: bold;
+  margin: 0 10px;
+  color: #000;
+}
+
+.text-right {
+  font-weight: 200;
+  color: #fff;
+  margin: 0 1.5rem;
+}
+
+.text-status {
+  margin-left: 10px;
+  color: yellow;
+}
+
+.text-end {
+  color: #9fe0ff;
+  font-weight: 400;
+  font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
+  margin-left: 1.5rem;
+}

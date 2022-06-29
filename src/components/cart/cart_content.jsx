@@ -3,8 +3,8 @@ import { Link } from "react-router-dom";
 import { useCart } from "react-use-cart";
 
 const Cart_content = () => {
-
-  const {isEmpty,items,cartTotal,removeItem,updateItemQuantity}=useCart();
+  const { isEmpty, items, cartTotal, removeItem, updateItemQuantity } =
+    useCart();
 
   return (
     <div>
@@ -14,93 +14,114 @@ const Cart_content = () => {
           <div className="row">
             <main className="col-md-9">
               <div className="card">
-                {isEmpty
-                ? <div style={{color: "red"}} className="cart-empty">Giỏ hàng của bạn đang trống!</div>
-                :
-                <table className="table table-borderless table-shopping-cart">
-                  <thead className="text-muted">
-                    <tr className="small text-uppercase">
-                      <th scope="col">Sản phẩm</th>
-                      <th scope="col" width={120}>
-                        Số lượng
-                      </th>
-                      <th scope="col" width={120}>
-                        Giá
-                      </th>
-                      <th scope="col" className="text-right" width={200}>
-                        {" "}
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {items.map((product) => (
-                      <tr key={product.id}>
-                        <td>
-                          <figure className="itemside">
-                            <div className="aside">
-                              <Link to={`/product/${product.id}`}>
-                                <img src={product.image} className="img-sm" />
-                              </Link>
-                            </div>
-                            <figcaption className="info">
-                              <Link
-                                to={`/product/${product.id}`}
-                                className="title mb-2"
-                              >
-                                {product.name}
-                              </Link>
-                              <p className="text-muted small">
-                                Xuất xứ: {product.origin}, <br />
-                                Bảo hành: {product.insurance} <br />
-                                Thời gian giao hàng: {product.delivery_time}
-                              </p>
-                            </figcaption>
-                          </figure>
-                        </td>
-                        <td>
-                          <div className="buttons_added">
-                            <input
-                              className="minus is-form"
-                              type="button"
-                              defaultValue="-"
-                              onClick={()=>updateItemQuantity(product.id,product.quantity-1)}
-                            />
-                            <span className="input-qty is-form"><p style={{marginTop: "7px"}}>{product.quantity}</p></span>
-                            <input
-                              className="plus is-form"
-                              type="button"
-                              defaultValue="+"
-                              onClick={()=>updateItemQuantity(product.id,product.quantity+1)}
-                            />
-                          </div>
-                        </td>
-                        <td>
-                          <div className="price-wrap">
-                            <var className="price">{product.price}₫</var>
-                            <small className="text-muted">
-                              {" "}
-                              {product.price_discount}₫ chiếc{" "}
-                            </small>
-                          </div>{" "}
-                          {/* price-wrap .// */}
-                        </td>
-                        <td className="text-right">
-                        <a
-                            data-original-title="Save to Wishlist"
-                            href="#"
-                            className="btn btn-light"
-                            data-toggle="tooltip"
-                          >
-                            <i className="fa fa-heart" />
-                          </a>
-                          <a href="#" className="btn btn-light" onClick={()=>removeItem(product.id)}>
-                            Xóa
-                          </a>
-                        </td>
+                {isEmpty ? (
+                  <div style={{ color: "red" }} className="cart-empty">
+                    Giỏ hàng của bạn đang trống!
+                  </div>
+                ) : (
+                  <table className="table table-borderless table-shopping-cart">
+                    <thead className="text-muted">
+                      <tr className="small text-uppercase">
+                        <th scope="col">Sản phẩm</th>
+                        <th scope="col" width={120}>
+                          Số lượng
+                        </th>
+                        <th scope="col" width={120}>
+                          Giá
+                        </th>
+                        <th scope="col" className="text-right" width={200}>
+                          {" "}
+                        </th>
                       </tr>
-                    ))}
-                  </tbody>
-                </table>}
+                    </thead>
+                    <tbody>
+                      {items.map((product) => (
+                        <tr key={product.id}>
+                          <td>
+                            <figure className="itemside">
+                              <div className="aside">
+                                <Link to={`/product/${product.id}`}>
+                                  <img src={product.image} className="img-sm" />
+                                </Link>
+                              </div>
+                              <figcaption className="info">
+                                <Link
+                                  to={`/product/${product.id}`}
+                                  className="title mb-2"
+                                >
+                                  {product.name}
+                                </Link>
+                                <p className="text-muted small">
+                                  Xuất xứ: {product.origin}, <br />
+                                  Bảo hành: {product.insurance} <br />
+                                  Thời gian giao hàng: {product.delivery_time}
+                                </p>
+                              </figcaption>
+                            </figure>
+                          </td>
+                          <td>
+                            <div className="buttons_added">
+                              <input
+                                className="minus is-form"
+                                type="button"
+                                defaultValue="-"
+                                onClick={() =>
+                                  updateItemQuantity(
+                                    product.id,
+                                    product.quantity - 1
+                                  )
+                                }
+                              />
+                              <span className="input-qty is-form">
+                                <p style={{ marginTop: "7px" }}>
+                                  {product.quantity}
+                                </p>
+                              </span>
+                              <input
+                                className="plus is-form"
+                                type="button"
+                                defaultValue="+"
+                                onClick={() =>
+                                  updateItemQuantity(
+                                    product.id,
+                                    product.quantity + 1
+                                  )
+                                }
+                              />
+                            </div>
+                          </td>
+                          <td>
+                            <div className="price-wrap">
+                              <var className="price">{product.price}₫</var>
+                              <small className="text-muted">
+                                {" "}
+                                {product.price_discount}₫ chiếc{" "}
+                              </small>
+                            </div>{" "}
+                            {/* price-wrap .// */}
+                          </td>
+                          <td className="text-right">
+                            <a
+                              data-original-title="Save to Wishlist"
+                              href="#"
+                              className="btn btn-light"
+                              data-toggle="tooltip"
+                            >
+                              <i className="fa fa-heart" />
+                            </a>
+                            <a
+                              href="#"
+                              className="btn btn-light"
+                              onClick={() => removeItem(product.id)}
+                            >
+                              Xóa
+                            </a>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                )}
                 <div className="card-body border-top">
                   <a
                     href="/pay_cart"

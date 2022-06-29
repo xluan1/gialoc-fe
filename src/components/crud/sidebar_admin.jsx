@@ -1,6 +1,8 @@
 import React from "react";
 
 const Sidebar_admin = () => {
+  const userName = localStorage.getItem("userName");
+
   return (
     <div>
       {/* Main Sidebar Container */}
@@ -18,7 +20,7 @@ const Sidebar_admin = () => {
         {/* Sidebar */}
         <div className="sidebar">
           {/* Sidebar user panel (optional) */}
-          {/* <div className="user-panel mt-3 pb-3 mb-3 d-flex">
+          <div className="user-panel mt-3 pb-3 mb-3 d-flex">
             <div className="image">
               <img
                 src="/assets/dist/img/avt.png"
@@ -28,10 +30,10 @@ const Sidebar_admin = () => {
             </div>
             <div className="info">
               <a href="../login" className="d-block">
-                Gia Lộc
+                {userName}
               </a>
             </div>
-          </div> */}
+          </div>
           {/* SidebarSearch Form */}
           <div className="form-inline">
             <div className="input-group" data-widget="sidebar-search">
@@ -56,40 +58,6 @@ const Sidebar_admin = () => {
               role="menu"
               data-accordion="false"
             >
-              {/* Add icons to the links using the .nav-icon class
-               with font-awesome or any other icon font library */}
-              <li className="nav-item menu-open">
-                <a href="#" className="nav-link active">
-                  <i className="nav-icon fas fa-tachometer-alt" />
-                  <p>
-                    Bảng điều khiển
-                    <i className="right fas fa-angle-left" />
-                  </p>
-                </a>
-                <ul className="nav nav-treeview">
-                  <li className="nav-item">
-                    <a href="./administration" className="nav-link active">
-                      <i className="far fa-circle nav-icon" />
-                      <p>Bảng điều khiển 1</p>
-                    </a>
-                  </li>
-                  <li className="nav-item">
-                    <a href="#" className="nav-link">
-                      <i className="far fa-circle nav-icon" />
-                      <p>Bảng điều khiển 2</p>
-                    </a>
-                  </li>
-                  <li className="nav-item">
-                    <a href="#" className="nav-link">
-                      <i className="far fa-circle nav-icon" />
-                      <p>Bảng điều khiển 3</p>
-                    </a>
-                  </li>
-                </ul>
-              </li>
-
-              <div className="user-panel mt-3 pb-3 mb-3 d-flex"></div>
-
               <div className="user-panel mt-3 pb-3 mb-3 d-flex">
                 <div
                   style={{ marginBottom: "10px", marginLeft: "10px" }}
@@ -131,6 +99,21 @@ const Sidebar_admin = () => {
                       className="nav-icon far fa-circle text-info"
                     />
                     Quản lý thương hiệu
+                  </a>
+                </div>
+              </div>
+
+              <div className="user-panel mt-3 pb-3 mb-3 d-flex">
+                <div
+                  style={{ marginBottom: "10px", marginLeft: "10px" }}
+                  className="info"
+                >
+                  <a href="../../order_crud" className="d-block">
+                    <i
+                      style={{ marginRight: "7px" }}
+                      className="nav-icon far fa-circle text-info"
+                    />
+                    Quản lý Đơn hàng
                   </a>
                 </div>
               </div>

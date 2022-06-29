@@ -5,40 +5,40 @@ import Header from "../home/header";
 import requestService from "../../util/request-service";
 
 const Register = () => {
-  const registerForm={
-    email: '',
-    firstName: '',
-    lastName: '',
-    password: '',
-    phoneNumber: '',
-    rePassword: '',
-    userName: ''
+  const registerForm = {
+    email: "",
+    firstName: "",
+    lastName: "",
+    password: "",
+    phoneNumber: "",
+    rePassword: "",
+    userName: "",
   };
-  const registerAddressForm={
-    country: '',
-    hamlet: '',
-    province: '',
-    town: '',
-    village: ''
-  }
+  const registerAddressForm = {
+    country: "",
+    hamlet: "",
+    province: "",
+    town: "",
+    village: "",
+  };
   const navigate = useNavigate();
   const [user, setUser] = useState(registerForm);
-  const [error,setError]= useState('');
-  const [address,setAddress]=useState(registerAddressForm);
-  const handleChangeInput=(event)=>{
+  const [error, setError] = useState("");
+  const [address, setAddress] = useState(registerAddressForm);
+  const handleChangeInput = (event) => {
     const newdata = { ...user };
     newdata[event.target.name] = event.target.value;
     setUser(newdata);
-  }
-  const handleChangeInputAddress=(event)=>{
+  };
+  const handleChangeInputAddress = (event) => {
     const newdata = { ...address };
     newdata[event.target.name] = event.target.value;
     setAddress(newdata);
-  }
-  
+  };
+
   const onClickRegister = async (event) => {
     event.preventDefault();
-    const _register={
+    const _register = {
       address: address,
       email: user.email,
       firstName: user.firstName,
@@ -46,22 +46,26 @@ const Register = () => {
       password: user.password,
       phoneNumber: user.phoneNumber,
       rePassword: user.rePassword,
-      userName: user.userName
+      userName: user.userName,
     };
     // alert(JSON.stringify(data));
     try {
-      const response = await requestService.post("/auth/sign-up", _register, 1500);
+      const response = await requestService.post(
+        "/auth/sign-up",
+        _register,
+        1500
+      );
       setUser(response.data);
       navigate("/login");
     } catch (error) {
-        setError((error.response.data.errorDetail));
+      setError(error.response.data.errorDetail);
     }
   };
 
   useEffect(() => {
     const timeout = setTimeout(() => setError(null), 2000);
     return () => clearTimeout(timeout);
-}, [error]);
+  }, [error]);
 
   return (
     <div>
@@ -76,7 +80,11 @@ const Register = () => {
         >
           <article className="card-body">
             <header className="mb-4">
-              {error ? <div className="alert alert-danger" role="alert">{error}</div> : null}
+              {error ? (
+                <div className="alert alert-danger" role="alert">
+                  {error}
+                </div>
+              ) : null}
               <h4 className="card-title">Đăng ký</h4>
             </header>
             <form onSubmit={onClickRegister}>
@@ -86,7 +94,7 @@ const Register = () => {
                   type="text"
                   className="form-control"
                   placeholder="Nhập tên người dùng"
-                  name={'userName'}
+                  name={"userName"}
                   value={user.userName}
                   onChange={handleChangeInput}
                 />
@@ -167,7 +175,7 @@ const Register = () => {
                   type="text"
                   className="form-control"
                   placeholder="Số điện thoại phải đúng 10 số"
-                  name={'phoneNumber'}
+                  name={"phoneNumber"}
                   value={user.phoneNumber}
                   onChange={handleChangeInput}
                 />
@@ -236,7 +244,6 @@ const Register = () => {
               </div>
               <div className="form-group">
                 <button type="submit" className="btn btn-primary btn-block">
-                  {" "}
                   Đăng ký
                 </button>
               </div>{" "}
@@ -262,10 +269,7 @@ const Register = () => {
         </div>{" "}
         {/* card .// */}
         <p className="text-center mt-4">
-          Đã Có tài khoản ?{" "}
-          <Link to="/login">
-            Đăng nhập
-          </Link>
+          Đã Có tài khoản ? <Link to="/login">Đăng nhập</Link>
         </p>
         <br />
         <br />

@@ -28,11 +28,22 @@ const Product_detail = () => {
     setAmount(event.target.value);
   }
 
+  const buttonPlus = () => {
+    if (amount < 10) {
+      setAmount(amount + 1);
+    }
+  }
+  const buttonMinus = () => {
+    if (amount > 1) {
+      setAmount(amount - 1);
+    }
+  }
+
   const {addItem} = useCart();
 
   const onSuccess = (product) => {
     alert("Thêm vào giỏ hàng thành công!")
-    addItem(product)
+    addItem(product,amount)
 }
   
 
@@ -159,52 +170,19 @@ const Product_detail = () => {
                 </dl>
                 <div className="form-row  mt-4">
                   <div className="form-group col-md flex-grow-0">
-                    {/* <div className="input-group mb-3 input-spinner">
-                      <div className="input-group-prepend">
-                        <button
-                          className="btn btn-light"
-                          type="button"
-                          id="button-plus"
-                        >
-                          -
-                        </button>
-                      </div>
-                      <input
-                        type="text"
-                        className="form-control"
-                        defaultValue={1}
-                      />
-                      <div className="input-group-append">
-                        <button
-                          className="btn btn-light"
-                          type="button"
-                          id="button-minus"
-                        >
-                          +
-                        </button>
-                      </div>
-                    </div> */}
                     <div className="buttons_added">
+                      <div className="input-group-prepend">
+                        <button className="btn btn-light" onClick={buttonMinus}>-</button>
+                      </div>
                       <input
-                        className="minus is-form"
+                        className="form-control"
                         type="button"
-                        defaultValue="-"
-                        onClick={()=>setAmount(amount-1)}
-                      />
-                      <input
-                        className="input-qty"
-                        max={10}
-                        min={1}
-                        type="number"
                         value={amount}
                         onChange={handleQuantity}
                       />
-                      <input
-                        className="plus is-form"
-                        type="button"
-                        defaultValue="+"
-                        onClick={()=>setAmount(amount+1)}
-                      />
+                     <div className="input-group-prepend">
+                        <button className="btn btn-light" onClick={buttonPlus}>+</button>
+                      </div>
                     </div>
                   </div>{" "}
                   {/* col.// */}
